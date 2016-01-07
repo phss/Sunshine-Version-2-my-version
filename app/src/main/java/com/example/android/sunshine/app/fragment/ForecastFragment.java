@@ -1,5 +1,7 @@
 package com.example.android.sunshine.app.fragment;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.activity.DetailActivity;
 import com.example.android.sunshine.app.task.FetchWeatherTask;
 
 import java.util.ArrayList;
@@ -36,7 +39,7 @@ public class ForecastFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_refresh && forecastListAdapter != null) {
-            new FetchWeatherTask(forecastListAdapter).execute("94043");
+            populateForecastList();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -59,11 +62,19 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String forecast = forecastListAdapter.getItem(i);
-                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), DetailActivity.class)
+                        .putExtra(Intent.EXTRA_INTENT, forecast);
+                startActivity(intent);
             }
         });
 
+        populateForecastList();
+
         return rootView;
+    }
+
+    private AsyncTask<String, Void, String[]> populateForecastList() {
+        return new FetchWeatherTask(forecastListAdapter).execute("94043");
     }
 
 }
