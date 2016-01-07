@@ -20,11 +20,7 @@ import java.util.ArrayList;
 
 public class ForecastFragment extends Fragment {
 
-    private ArrayAdapter<String> forecastAdapter;
-
-    public ForecastFragment() {
-
-    }
+    private FetchWeatherTask fetchWeatherTask;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,8 +35,8 @@ public class ForecastFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_refresh) {
-            new FetchWeatherTask(forecastAdapter).execute("94043");
+        if (item.getItemId() == R.id.action_refresh && fetchWeatherTask != null) {
+            fetchWeatherTask.execute("94043");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -51,20 +47,20 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        forecastAdapter = new ArrayAdapter<>(
+        final ArrayAdapter<String> forecastListAdapter = new ArrayAdapter<>(
                 getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
                 new ArrayList());
+        fetchWeatherTask = new FetchWeatherTask(forecastListAdapter);
 
         ListView listViewForecast = (ListView) rootView.findViewById(R.id.listview_forecast);
-        listViewForecast.setAdapter(forecastAdapter);
+        listViewForecast.setAdapter(forecastListAdapter);
         listViewForecast.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String forecast = forecastAdapter.getItem(i);
-                Toast toast = Toast.makeText(container.getContext(), forecast, Toast.LENGTH_SHORT);
-                toast.show();
+                String forecast = forecastListAdapter.getItem(i);
+                Toast.makeText(getActivity(), forecast, Toast.LENGTH_SHORT).show();
             }
         });
 
