@@ -19,9 +19,12 @@ package com.example.android.sunshine.app.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,22 +63,46 @@ public class DetailActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
 
+        public PlaceholderFragment() {
+            setHasOptionsMenu(true);
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            MenuItem menuItem = menu.findItem(R.id.action_share);
+            ShareActionProvider provider =
+                    (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
+            provider.setShareIntent(createShareForecastIntent());
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
-            String forecast = getActivity().getIntent().getStringExtra(Intent.EXTRA_INTENT);
+            String forecast = getForecast();
 
             TextView detailText = (TextView) rootView.findViewById(R.id.detail_text);
             detailText.setText(forecast);
 
             return rootView;
+        }
+
+        private String getForecast() {
+            return getActivity().getIntent().getStringExtra(Intent.EXTRA_INTENT);
+        }
+
+        private Intent createShareForecastIntent() {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getForecast() + " #SunshineApp");
+            return shareIntent;
         }
     }
 }
