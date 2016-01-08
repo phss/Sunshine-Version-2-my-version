@@ -1,9 +1,13 @@
 package com.example.android.sunshine.app.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +50,12 @@ public class ForecastFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        populateForecastList();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -68,13 +78,13 @@ public class ForecastFragment extends Fragment {
             }
         });
 
-        populateForecastList();
-
         return rootView;
     }
 
     private AsyncTask<String, Void, String[]> populateForecastList() {
-        return new FetchWeatherTask(forecastListAdapter).execute("94043");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        return new FetchWeatherTask(forecastListAdapter).execute(location);
     }
 
 }
