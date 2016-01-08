@@ -84,7 +84,8 @@ public class ForecastFragment extends Fragment {
     private AsyncTask<String, Void, String[]> populateForecastList() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
-        return new FetchWeatherTask(forecastListAdapter).execute(location);
+        String temperature = preferences.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temperature_default));
+        return new FetchWeatherTask(forecastListAdapter).execute(location, temperature);
     }
 
 }

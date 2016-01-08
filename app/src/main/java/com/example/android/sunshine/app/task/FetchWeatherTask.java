@@ -36,12 +36,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
     }
 
     @Override
-    protected String[] doInBackground(String... locations) {
+    protected String[] doInBackground(String... params) {
         try {
             Uri uri = Uri.parse("http://api.openweathermap.org/data/2.5/forecast/daily").buildUpon()
-                    .appendQueryParameter("q", locations[0])
+                    .appendQueryParameter("q", params[0])
                     .appendQueryParameter("mode", "json")
-                    .appendQueryParameter("units", "metric")
+                    .appendQueryParameter("units", params[1])
                     .appendQueryParameter("cnt", "7")
                     .appendQueryParameter("APPID", BuildConfig.OPEN_WEATHER_MAP_API_KEY)
                     .build();
