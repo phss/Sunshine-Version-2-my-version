@@ -3,20 +3,35 @@ package com.example.android.sunshine.app;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.android.sunshine.app.data.WeatherContract;
-
-import static com.example.android.sunshine.app.Utility.*;
+import static com.example.android.sunshine.app.Utility.formatDate;
+import static com.example.android.sunshine.app.Utility.formatTemperature;
+import static com.example.android.sunshine.app.Utility.isMetric;
 
 /**
  * {@link ForecastAdapter} exposes a list of weather forecasts
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
  */
 public class ForecastAdapter extends CursorAdapter {
+
+    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
+    // must change.
+    static final int COL_WEATHER_ID = 0;
+    static final int COL_WEATHER_DATE = 1;
+    static final int COL_WEATHER_DESC = 2;
+    static final int COL_WEATHER_MAX_TEMP = 3;
+    static final int COL_WEATHER_MIN_TEMP = 4;
+    static final int COL_LOCATION_SETTING = 5;
+    static final int COL_WEATHER_CONDITION_ID = 6;
+    static final int COL_COORD_LAT = 7;
+    static final int COL_COORD_LONG = 8;
+
+
     public ForecastAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -34,18 +49,12 @@ public class ForecastAdapter extends CursorAdapter {
         string.
      */
     private String convertCursorRowToUXFormat(Cursor cursor) {
-        // get row indices for our cursor
-        int idx_max_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP);
-        int idx_min_temp = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP);
-        int idx_date = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_DATE);
-        int idx_short_desc = cursor.getColumnIndex(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC);
-
         String highAndLow = formatHighLows(
-                cursor.getDouble(idx_max_temp),
-                cursor.getDouble(idx_min_temp));
+                cursor.getDouble(COL_WEATHER_MAX_TEMP),
+                cursor.getDouble(COL_WEATHER_MIN_TEMP));
 
-        return formatDate(cursor.getLong(idx_date)) +
-                " - " + cursor.getString(idx_short_desc) +
+        return formatDate(cursor.getLong(COL_WEATHER_DATE)) +
+                " - " + cursor.getString(COL_WEATHER_DESC) +
                 " - " + highAndLow;
     }
 
@@ -54,6 +63,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+//        Log.v("BLAH", "newview");
         return LayoutInflater.from(context).inflate(R.layout.list_item_forecast, parent, false);
     }
 
@@ -62,10 +72,13 @@ public class ForecastAdapter extends CursorAdapter {
      */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+//        Log.v("BLAH", "bindview");
         // our view is pretty simple here --- just a text view
         // we'll keep the UI functional with a simple (and slow!) binding.
 
         TextView tv = (TextView)view;
-        tv.setText(convertCursorRowToUXFormat(cursor));
+        String forecast = convertCursorRowToUXFormat(cursor);
+//        Log.v("BLAH", forecast);
+        tv.setText(forecast);
     }
 }
