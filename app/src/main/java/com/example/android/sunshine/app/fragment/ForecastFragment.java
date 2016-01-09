@@ -85,7 +85,7 @@ public class ForecastFragment extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String location = preferences.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
         String temperature = preferences.getString(getString(R.string.pref_temperature_key), getString(R.string.pref_temperature_default));
-        return new FetchWeatherTask(forecastListAdapter).execute(location, temperature);
+        return new FetchWeatherTask(getActivity(), forecastListAdapter).execute(location, temperature);
     }
 
 }
