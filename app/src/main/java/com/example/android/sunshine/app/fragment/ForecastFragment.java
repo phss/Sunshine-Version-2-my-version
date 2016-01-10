@@ -33,10 +33,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.sunshine.app.R;
-import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.activity.DetailActivity;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.task.FetchWeatherTask;
+import com.example.android.sunshine.app.utils.Utility;
 
 /**
  * Encapsulates fetching the forecast and displaying it as a {@link ListView} layout.

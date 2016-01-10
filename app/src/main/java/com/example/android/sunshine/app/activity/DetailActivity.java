@@ -35,8 +35,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.sunshine.app.R;
-import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
+import com.example.android.sunshine.app.utils.Utility;
 
 
 public class DetailActivity extends ActionBarActivity {

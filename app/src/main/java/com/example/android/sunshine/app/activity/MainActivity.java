@@ -10,8 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.sunshine.app.R;
-import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.fragment.ForecastFragment;
+import com.example.android.sunshine.app.utils.Utility;
 
 
 public class MainActivity extends ActionBarActivity {
