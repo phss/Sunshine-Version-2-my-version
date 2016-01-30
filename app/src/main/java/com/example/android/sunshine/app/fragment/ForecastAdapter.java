@@ -34,8 +34,8 @@ public class ForecastAdapter extends CursorAdapter {
     public static final int COL_COORD_LAT = 7;
     public static final int COL_COORD_LONG = 8;
 
-    public static int VIEW_TYPE_TODAY = 0;
-    public static int VIEW_TYPE_FUTURE_DAY = 1;
+    public static final int VIEW_TYPE_TODAY = 0;
+    public static final int VIEW_TYPE_FUTURE_DAY = 1;
 
 
     public ForecastAdapter(Context context, Cursor c, int flags) {
@@ -71,8 +71,20 @@ public class ForecastAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder holder = (ViewHolder) view.getTag();
 
-        int weatherId = cursor.getInt(ForecastAdapter.COL_WEATHER_ID);
-        holder.iconView.setImageResource(R.drawable.ic_launcher);
+        int viewType = getItemViewType(cursor.getPosition());
+        switch (viewType) {
+            case VIEW_TYPE_TODAY: {
+                holder.iconView.setImageResource(Utility.getArtResourceForWeatherCondition(
+                        cursor.getInt(ForecastAdapter.COL_WEATHER_CONDITION_ID)));
+                break;
+            }
+            case VIEW_TYPE_FUTURE_DAY: {
+                holder.iconView.setImageResource(Utility.getIconResourceForWeatherCondition(
+                        cursor.getInt(ForecastAdapter.COL_WEATHER_CONDITION_ID)));
+                break;
+            }
+        }
+
 
         holder.dateView.setText(Utility.getFriendlyDayString(context, cursor.getLong(ForecastAdapter.COL_WEATHER_DATE)));
 
